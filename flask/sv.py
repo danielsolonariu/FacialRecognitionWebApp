@@ -18,25 +18,11 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("APP_SECRET_KEY")
 
 @app.route("/", methods=["GET", "POST"])
-def index():
-    if request.method == "GET":
-        return render_template("app/index.html")
-    
-    username = request.form.get("username")
-    password = request.form.get("password")
+def index():  
+    user_is_logged_in = session.get('username') is not None
+    username = session.get('username')
 
-    passwordhash = sha256(password.encode()).hexdigest()
-
-    user_doc = db_users.find_one({"username": username})
-
-    if user_doc is None or user_doc["password"] != passwordhash:
-        return render_template("index.html", error="Wrong username or password. Try again or click \"Forgot your password?\" to reset it.")
-
-    session["username"] = username
-
-    session["is_admin"] = user_doc.get("is_admin", False)
-
-    return redirect("/dashboard")
+    return render_template("app/index.html", user_is_logged_in=user_is_logged_in, username=username)
 
 @app.route("/register", methods=["GET", "POST"])
 def sign_up():
@@ -54,6 +40,36 @@ def sign_up():
         return render_template("auth/register.html", error="Passwords do not match. Please try again.", username=username, password=password, repeat_password=repeat_password)
 
     db_users.insert_one({"username": username, "password": sha256(password.encode()).hexdigest()})
+
+    return redirect("/")
+
+@app.route("/login", methods=["GET", "POST"])
+def sign_in():
+    if request.method == "GET":
+        return render_template("auth/login.html")
+    
+    username = request.form.get("username")
+    password = request.form.get("password")
+
+    passwordhash = sha256(password.encode()).hexdigest()
+
+    user_doc = db_users.find_one({"username": username})
+
+    if user_doc is None or user_doc["password"] != passwordhash:
+        return render_template("auth/login.html", error="Wrong username or password. Try again or click \"Forgot your password?\" to reset it.")
+
+    session["username"] = username
+
+    session["is_admin"] = user_doc.get("is_admin", False)
+
+    return redirect("/")
+
+@app.route("/sign_out")
+def sign_out():
+    if "username" in session:
+        session.pop("username")
+    if "admin" in session:
+        session.pop("admin")
 
     return redirect("/")
 

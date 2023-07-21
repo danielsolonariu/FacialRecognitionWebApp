@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Sign In{% endblock %}
+{% block content %}
+<br>
+<div class="container mt-4" style="max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+    <h2 style="margin-bottom: 20px;">SIGN IN</h2>
+    <form action="/login" method="post">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required class="form-control">
+        </div>
+        {% if error %}
+        <p id="eroare">{{error}}</p>
+        {% endif %}
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-primary">Sign In</button>
+            <a href="/" class="btn btn-secondary cancel">Cancel</a>
+        </div>
+        <div class="form-group text-center">
+            <a href="#">Forgot your password?</a>
+        </div>
+        <div class="form-group text-center">
+            <span>Don't have an account?</span>
+            <a href="/register">Sign Up</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
