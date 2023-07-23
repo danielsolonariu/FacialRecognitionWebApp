@@ -41,7 +41,7 @@ def sign_up():
 
     db_users.insert_one({"username": username, "password": sha256(password.encode()).hexdigest()})
 
-    return redirect("/")
+    return redirect("/login")
 
 @app.route("/login", methods=["GET", "POST"])
 def sign_in():

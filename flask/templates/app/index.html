@@ -1,5 +1,59 @@
 {% extends "base.html" %}
 {% block title %}Facial Recognition - Web Application{% endblock %}
 {% block content %}
-
+<div id="container">
+    <div class="tool">
+        <img src="{{ url_for('static', filename='images/compare_faces.png') }}" alt="Compare Faces">
+        <br>
+        <h2>COMPARE FACES</h2>
+        <p>Upload two photos, find if they match. Simple face comparison.</p>
+        <button class="try-now" id="try-now-compare-faces">Try now</button>
+        <script>
+            document.getElementById("try-now-compare-faces").addEventListener("click", function() {window.location.href = "/comparefaces";});
+        </script>
+    </div>
+    <div class="tool">
+        {% if user_is_logged_in %}
+            <img src="{{ url_for('static', filename='images/find_faces.png') }}" alt="Find Faces">
+        {% else %}
+            <span class="material-symbols-outlined">lock</span>
+            <img src="{{ url_for('static', filename='images/find_faces_blocked.png') }}" alt="Find Faces Blocked">
+        {% endif %}
+        <br>
+        <h2>FIND FACES</h2>
+        <p>Upload a reference photo and see if the person is in other photos.</p>
+        {% if user_is_logged_in %}
+            <button class="try-now" id="try-now-find-faces">Try now</button>
+            <script>
+                document.getElementById("try-now-find-faces").addEventListener("click", function() {window.location.href = "/findfaces";});
+            </script>
+        {% else %}
+            <button class="signin-to-unlock" id="unlock-button">Sign in to Unlock</button>
+            <script>
+                document.getElementById("unlock-button").addEventListener("click", function() {window.location.href = "/login";});
+            </script>
+        {% endif %}
+    </div>
+    <div class="tool">
+        {% if user_is_logged_in %}
+            <img src="{{ url_for('static', filename='images/blur_faces.png') }}" alt="Blur Faces">
+        {% else %}
+            <span class="material-symbols-outlined">lock</span>
+            <img src="{{ url_for('static', filename='images/blur_faces_blocked.png') }}" alt="Blur Faces Blocked">
+        {% endif %}
+        <br>
+        <h2>BLUR FACES</h2>
+        <p>Upload one or more reference photo/s and blur the faces.</p>
+        {% if user_is_logged_in %}
+            <button class="try-now" id="try-now-blur-faces">Try now</button>
+            <script>
+                document.getElementById("try-now-blur-faces").addEventListener("click", function() {window.location.href = "/blurfaces";});
+            </script>
+        {% else %}
+            <button class="signin-to-unlock" id="unlock-button2">Sign in to Unlock</button>
+            <script>
+                document.getElementById("unlock-button2").addEventListener("click", function() {window.location.href = "/login";});
+            </script>
+        {% endif %}
+    </div>
 {% endblock %}
