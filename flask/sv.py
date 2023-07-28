@@ -1,9 +1,11 @@
 import os
 from datetime import datetime, timedelta
 from hashlib import sha256
+
 from dotenv import find_dotenv, load_dotenv
 from flask import Flask, redirect, render_template, request, session
 from pymongo import MongoClient
+
 load_dotenv(find_dotenv())
 
 
@@ -13,6 +15,7 @@ client = MongoClient(MONGODB_URI)
 database = client.FacialRecognitionWebApp
 
 db_users = database.users
+db_images = database.images
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("APP_SECRET_KEY")
@@ -72,6 +75,42 @@ def sign_out():
         session.pop("admin")
 
     return redirect("/")
+
+@app.route("/comparefaces", methods=["GET", "POST"])
+def compare_faces():
+    user_is_logged_in = session.get('username') is not None
+    username = session.get('username')
+
+    if request.method == "GET":
+        return render_template("app/comparefaces.html", user_is_logged_in=user_is_logged_in, username=username)
+    
+    file_name_img1 = request.files["file1"].filename
+    file_data_img1 = request.files["file1"].stream.read()
+    file_name_sha_img1 = sha256(file_data_img1).hexdigest()
+
+    file_name_img2 = request.files["file2"].filename
+    file_data_img2 = request.files["file2"].stream.read()
+    file_name_sha_img2 = sha256(file_data_img2).hexdigest()
+
+    insert_date = datetime.now()
+
+    db_images.insert_one({
+        "insert_date": insert_date,
+        "user": username,
+        "name_img1": file_name_img1,
+        "sha256_img1": file_name_sha_img1,
+        "data_img1": file_data_img1,
+        "name_img2": file_name_img2,
+        "sha256_img2": file_name_sha_img2,
+        "data_img2": file_data_img2
+    })
+
+    return render_template("app/comparefaces.html", user_is_logged_in=user_is_logged_in, username=username)
+
+
+
+
+
 
 
 app.run("0.0.0.0", port=80, debug=True)

@@ -1,6 +1,7 @@
 .navbar-brand img {
     max-height: 40px;
 }
+
 body {
     margin-bottom: 60px;
     font-family: Arial, sans-serif;
@@ -8,6 +9,7 @@ body {
     margin: 0;
     padding: 0;
 }
+
 footer {
     position: fixed;
     bottom: 0;
@@ -16,21 +18,26 @@ footer {
     color: #fff;
     padding: 20px 0;
 }
+
 footer a {
     color: #fff;
 }
+
 footer a:hover {
     color: #f8f9fa;
 }
+
 #eroare {
     color: red;
 }
+
 #container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     margin-top: 30px;
 }
+
 .tool {
     position: relative;
     width: 300px;
@@ -42,6 +49,7 @@ footer a:hover {
     padding: 20px;
     text-align: center;
 }
+
 .tool img {
     width: 100px;
     height: 100px;
@@ -50,14 +58,17 @@ footer a:hover {
     display: block;
     margin: 0 auto;
 }
+
 .tool h2 {
     font-size: 18px;
     font-weight: bold;
     margin: 0;
 }
+
 .tool p {
     margin-top: 5px;
 }
+
 .try-now {
     background-color: #00C0E4;
     color: #ffffff;
@@ -72,9 +83,11 @@ footer a:hover {
     display: block;
     margin: 0 auto;
 }
+
 .try-now:hover {
     background-color: #00C0E4;
 }
+
 .signin-to-unlock {
     background-color: #343A40;
     color: #ffffff;
@@ -89,9 +102,11 @@ footer a:hover {
     display: block;
     margin: 0 auto;
 }
+
 .signin-to-unlock:hover {
     background-color: #343A40;
 }
+
 .material-symbols-outlined {
     position: absolute;
     top: 10px;
@@ -101,4 +116,75 @@ footer a:hover {
         'wght' 400,
         'GRAD' 0,
         'opsz' 48
+}
+
+.upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+}
+
+.upload-box-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.upload-box {
+    border: 2px dashed #cccccc;
+    border-radius: 10px;
+    width: 250px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.upload-box input {
+    display: none;
+}
+
+.upload-box label {
+    font-size: 16px;
+    color: #666666;
+    cursor: pointer;
+}
+
+.upload-box img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 8px;
+}
+
+.upload-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+}
+
+.upload-button button {
+    background-color: #00C0E4;
+    color: #ffffff;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    margin-top: 30px;
+    width: 150px;
+    height: 40px;
+    display: block;
+    margin: 0 auto;
+}
+
+.upload-button button:hover {
+    background-color: #00C0E4;
 }

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Compare Faces{% endblock %}
+{% block content %}
+<br>
+<div id="container">
+    <div class="upload-container">
+        <form action="/comparefaces" method="POST" enctype="multipart/form-data">
+            <div class="upload-box-container">
+                <div class="upload-box">
+                    <input type="file" id="file1" name="file1" accept="image/*" />
+                    <label for="file1">Click or drag an image here</label>
+                </div>
+                <div class="upload-box">
+                    <input type="file" id="file2" name="file2" accept="image/*" />
+                    <label for="file2">Click or drag an image here</label>
+                </div>
+            </div>
+            <div class="upload-button">
+                <button type="submit">Compare Faces</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
