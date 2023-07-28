@@ -2,17 +2,20 @@
 {% block title %}Compare Faces{% endblock %}
 {% block content %}
 <br>
+{% if display_result==False %}
 <div id="container">
     <div class="upload-container">
         <form action="/comparefaces" method="POST" enctype="multipart/form-data">
             <div class="upload-box-container">
                 <div class="upload-box">
-                    <input type="file" id="file1" name="file1" accept="image/*" />
-                    <label for="file1">Click or drag an image here</label>
+                    <input type="file" id="file1" name="file1" accept="image/*" onchange="updateLabelAndImage(this, 'label1', 'image1');" />
+                    <label id="label1" for="file1">Click or drag an image here</label>
+                    <img id="image1" src="" alt="Selected Image 1" style="max-width: 200px; max-height: 200px; display: none;" />
                 </div>
                 <div class="upload-box">
-                    <input type="file" id="file2" name="file2" accept="image/*" />
-                    <label for="file2">Click or drag an image here</label>
+                    <input type="file" id="file2" name="file2" accept="image/*" onchange="updateLabelAndImage(this, 'label2', 'image2');" />
+                    <label id="label2" for="file2">Click or drag an image here</label>
+                    <img id="image2" src="" alt="Selected Image 2" style="max-width: 200px; max-height: 200px; display: none;" />
                 </div>
             </div>
             <div class="upload-button">
@@ -21,4 +24,47 @@
         </form>
     </div>
 </div>
+{% else %}
+<div id="container">
+    <div class="upload-container">
+        <div class="upload-box-container">
+            <div class="upload-box">
+                <img src="{{ uri_img1 }}" alt="Image 1">
+            </div>
+            <div class="upload-box">
+                <img src="{{ uri_img2 }}" alt="Image 2">
+            </div>
+        </div>
+        <h2> SAME PERSON </h2>
+        <button class="try-now" id="try-again">Try again</button>
+        <script>
+            document.getElementById("try-again").addEventListener("click", function() {window.location.href = "/comparefaces";});
+        </script>
+    </div>
+</div>
+{% endif %}
+<br>
+<br>
+<br>
+<br>
+<br>
+<script>
+    function updateLabelAndImage(input, labelId, imageId) {
+        const label = document.getElementById(labelId);
+        const image = document.getElementById(imageId);
+        if (input.files && input.files.length > 0) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                label.textContent = input.files[0].name;
+                image.src = e.target.result;
+                image.style.display = "block";
+            };
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            label.textContent = "Click or drag an image here";
+            image.src = "";
+            image.style.display = "none";
+        }
+    }
+</script>
 {% endblock %}
