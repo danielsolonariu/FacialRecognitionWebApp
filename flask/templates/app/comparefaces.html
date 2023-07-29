@@ -35,7 +35,11 @@
                 <img src="{{ uri_img2 }}" alt="Image 2">
             </div>
         </div>
-        <h2> SAME PERSON </h2>
+        {% if result==True %}
+        <h2 style='color: green;'>{{result_message}}</h2>
+        {% else %}
+        <h2 style='color: red;'>{{result_message}}</h2>
+        {% endif %}
         <button class="try-now" id="try-again">Try again</button>
         <script>
             document.getElementById("try-again").addEventListener("click", function() {window.location.href = "/comparefaces";});

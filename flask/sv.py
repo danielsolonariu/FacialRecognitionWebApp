@@ -5,7 +5,7 @@ from hashlib import sha256
 from dotenv import find_dotenv, load_dotenv
 from flask import Flask, jsonify, redirect, render_template, request, session
 from pymongo import MongoClient
-from utils import get_data_uri
+from utils import get_data_uri, image_convert_BGR_to_RGB, compare_2_faces
 
 load_dotenv(find_dotenv())
 
@@ -89,40 +89,53 @@ def compare_faces():
                                display_result=False)
     
     if request.method == "POST":
+        insert_date = datetime.now()
+        
         # Receive and manipulate images from users
         file_name_img1 = request.files["file1"].filename
         file_data_img1 = request.files["file1"].stream.read()
         file_name_sha_img1 = sha256(file_data_img1).hexdigest()
+        rgb_img1 = image_convert_BGR_to_RGB(file_data_img1)
 
         file_name_img2 = request.files["file2"].filename
         file_data_img2 = request.files["file2"].stream.read()
         file_name_sha_img2 = sha256(file_data_img2).hexdigest()
-
-        insert_date = datetime.now()
-
-        # Insert data in the DB
-        db_images.insert_one({
-            "insert_date": insert_date,
-            "user": username,
-            "name_img1": file_name_img1,
-            "sha256_img1": file_name_sha_img1,
-            "data_img1": file_data_img1,
-            "name_img2": file_name_img2,
-            "sha256_img2": file_name_sha_img2,
-            "data_img2": file_data_img2
-        })
+        rgb_img2 = image_convert_BGR_to_RGB(file_data_img2)
 
         # Convert the binary image data to data URIs - to be used to display the images
         uri_img1 = get_data_uri(file_data_img1)
         uri_img2 = get_data_uri(file_data_img2)
 
+        # Compare faces result
+        result = bool(compare_2_faces(rgb_img1, rgb_img2)[0])
+
+        if result == True:
+            result_message = "SAME PERSON"
+        else:
+            result_message = "NOT THE SAME PERSON"
+
+        # Insert data in the DB, only if there is an user logged in - to be used for history
+        if user_is_logged_in:
+            db_images.insert_one({
+                "insert_date": insert_date,
+                "user": username,
+                "name_img1": file_name_img1,
+                "sha256_img1": file_name_sha_img1,
+                "data_img1": file_data_img1,
+                "name_img2": file_name_img2,
+                "sha256_img2": file_name_sha_img2,
+                "data_img2": file_data_img2,
+                "result": result,
+            })
 
         return render_template("app/comparefaces.html",
                                user_is_logged_in=user_is_logged_in,
                                username=username,
                                uri_img1=uri_img1,
                                uri_img2=uri_img2,
-                               display_result=True)
+                               display_result=True,
+                               result=result,
+                               result_message=result_message)
 
 
 
