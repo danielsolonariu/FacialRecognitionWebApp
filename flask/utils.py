@@ -21,3 +21,5 @@ def compare_2_faces(rgb_img1, rgb_img2):
     encoding_img2 = face_recognition.face_encodings(rgb_img2)[0]
     result = face_recognition.compare_faces([encoding_img1], encoding_img2)
     return result
+
+# def return_all_faces_from_an_image():

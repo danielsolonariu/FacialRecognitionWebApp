@@ -18,6 +18,14 @@
                     <img id="image2" src="" alt="Selected Image 2" style="max-width: 200px; max-height: 200px; display: none;" />
                 </div>
             </div>
+            {% if error_extension==True %}
+            <div style="display: flex; justify-content: center;">
+                <p style='color: red;'>{{error_extension_message1}}</p>
+            </div>
+            <div style="display: flex; justify-content: center;">
+                <p style='color: red;'>{{error_extension_message2}}</p>
+            </div>
+            {% endif %}
             <div class="upload-button">
                 <button type="submit">Compare Faces</button>
             </div>

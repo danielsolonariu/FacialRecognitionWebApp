@@ -89,15 +89,58 @@ def compare_faces():
                                display_result=False)
     
     if request.method == "POST":
+        allowed_extensions = ["png", "jpg", "jpeg", "bmp", "webp"]
+
+        file_name_img1 = request.files["file1"].filename
+        file_name_img2 = request.files["file2"].filename
+
+        extension_img1 = file_name_img1.rsplit('.')[-1]
+        extension_img2 = file_name_img2.rsplit('.')[-1]
+
+        error_extension_message2 = "Please choose one of the following formats: [png, jpg, jpeg, bmp, webp]"
+
+        if extension_img1 not in allowed_extensions and extension_img2 not in allowed_extensions:
+            error_extension = True
+            error_extension_message1 = "Both images do not have valid formats."
+            return render_template("app/comparefaces.html",
+                               user_is_logged_in=user_is_logged_in,
+                               username=username,
+                               display_result=False,
+                               error_extension=error_extension,
+                               error_extension_message1=error_extension_message1,
+                               error_extension_message2=error_extension_message2)
+
+        elif extension_img1 not in allowed_extensions:
+            error_extension = True
+            error_extension_message1 = "The first image does not have a valid format."
+            
+            return render_template("app/comparefaces.html",
+                               user_is_logged_in=user_is_logged_in,
+                               username=username,
+                               display_result=False,
+                               error_extension=error_extension,
+                               error_extension_message1=error_extension_message1,
+                               error_extension_message2=error_extension_message2)
+        elif extension_img2 not in allowed_extensions:
+            error_extension = True
+            error_extension_message1 = "The second image does not have a valid format."
+            return render_template("app/comparefaces.html",
+                               user_is_logged_in=user_is_logged_in,
+                               username=username,
+                               display_result=False,
+                               error_extension=error_extension,
+                               error_extension_message1=error_extension_message1,
+                               error_extension_message2=error_extension_message2)
+
         insert_date = datetime.now()
         
         # Receive and manipulate images from users
-        file_name_img1 = request.files["file1"].filename
+        # file_name_img1 = request.files["file1"].filename
         file_data_img1 = request.files["file1"].stream.read()
         file_name_sha_img1 = sha256(file_data_img1).hexdigest()
         rgb_img1 = image_convert_BGR_to_RGB(file_data_img1)
 
-        file_name_img2 = request.files["file2"].filename
+        # file_name_img2 = request.files["file2"].filename
         file_data_img2 = request.files["file2"].stream.read()
         file_name_sha_img2 = sha256(file_data_img2).hexdigest()
         rgb_img2 = image_convert_BGR_to_RGB(file_data_img2)
