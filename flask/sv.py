@@ -5,7 +5,7 @@ from hashlib import sha256
 from dotenv import find_dotenv, load_dotenv
 from flask import Flask, jsonify, redirect, render_template, request, session
 from pymongo import MongoClient
-from utils import get_data_uri, image_convert_BGR_to_RGB, compare_2_faces
+from utils import get_data_uri, image_convert_BGR_to_RGB, compare_2_faces, change_date_format
 
 load_dotenv(find_dotenv())
 
@@ -83,7 +83,7 @@ def compare_faces():
     username = session.get('username')
 
     if request.method == "GET":
-        return render_template("app/comparefaces.html",
+        return render_template("app/compare_faces.html",
                                user_is_logged_in=user_is_logged_in,
                                username=username,
                                display_result=False)
@@ -102,7 +102,7 @@ def compare_faces():
         if extension_img1 not in allowed_extensions and extension_img2 not in allowed_extensions:
             error_extension = True
             error_extension_message1 = "Both images do not have valid formats."
-            return render_template("app/comparefaces.html",
+            return render_template("app/compare_faces.html",
                                user_is_logged_in=user_is_logged_in,
                                username=username,
                                display_result=False,
@@ -114,7 +114,7 @@ def compare_faces():
             error_extension = True
             error_extension_message1 = "The first image does not have a valid format."
             
-            return render_template("app/comparefaces.html",
+            return render_template("app/compare_faces.html",
                                user_is_logged_in=user_is_logged_in,
                                username=username,
                                display_result=False,
@@ -124,7 +124,7 @@ def compare_faces():
         elif extension_img2 not in allowed_extensions:
             error_extension = True
             error_extension_message1 = "The second image does not have a valid format."
-            return render_template("app/comparefaces.html",
+            return render_template("app/compare_faces.html",
                                user_is_logged_in=user_is_logged_in,
                                username=username,
                                display_result=False,
@@ -132,7 +132,8 @@ def compare_faces():
                                error_extension_message1=error_extension_message1,
                                error_extension_message2=error_extension_message2)
 
-        insert_date = datetime.now()
+        date = datetime.now()
+        insert_date = change_date_format(str(date))
         
         # Receive and manipulate images from users
         # file_name_img1 = request.files["file1"].filename
@@ -171,7 +172,7 @@ def compare_faces():
                 "result": result,
             })
 
-        return render_template("app/comparefaces.html",
+        return render_template("app/compare_faces.html",
                                user_is_logged_in=user_is_logged_in,
                                username=username,
                                uri_img1=uri_img1,
@@ -180,7 +181,34 @@ def compare_faces():
                                result=result,
                                result_message=result_message)
 
+@app.route("/comparefaces/history", methods=["GET", "POST"])
+def compare_faces_history():
+    if not session.get("username"):
+        return redirect("/")
+    
+    user_is_logged_in = session.get('username') is not None
+    username = session.get('username')
 
+    records = [record for record in db_images.find({"user": username})]
+
+    record_counter = 1
+    for record in records:
+        # Convert the binary image data to data URIs - to be used to display the images
+        file_data_img1 = record["data_img1"]
+        record["data_img1"] = get_data_uri(file_data_img1)
+        file_data_img2 = record["data_img2"]
+        record["data_img2"] = get_data_uri(file_data_img2)
+        
+        # Add counter value to each record
+        record["counter"] = record_counter
+        record_counter += 1
+
+
+    if request.method == "GET":
+        return render_template("app/compare_faces_history.html",
+                               user_is_logged_in=user_is_logged_in,
+                               username=username,
+                               records=records)
 
 
 

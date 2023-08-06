@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Facial Recognition - Web Application{% endblock %}
+{% block content %}
+<div class="recognition-container">
+    <h1>Compare Faces - History</h1>
+    {% for record in records %}
+    <div class="history-item-container">
+            <span class="number">{{ record["counter"] }}</span>
+            <span class="date">{{ record["insert_date"] }}</span>
+            <div class="image-box">
+                <img class="history-image" src="{{ record.data_img1 }}" alt="First Image">
+            </div>
+            <div class="image-box">
+                <img class="history-image" src="{{ record.data_img2 }}" alt="Second Image">
+            </div>
+            {% if record["result"]==true %}
+                <span class="result-box result-success">Match</span>
+            {% else %}
+                <span class="result-box result-fail">No Match</span>
+            {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

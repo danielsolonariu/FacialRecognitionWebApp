@@ -1,7 +1,10 @@
 import base64
-import face_recognition
+from datetime import datetime
+
 import cv2
+import face_recognition
 import numpy as np
+
 
 def get_data_uri(image_data):
     encoded_data = base64.b64encode(image_data).decode('utf-8')
@@ -21,5 +24,14 @@ def compare_2_faces(rgb_img1, rgb_img2):
     encoding_img2 = face_recognition.face_encodings(rgb_img2)[0]
     result = face_recognition.compare_faces([encoding_img1], encoding_img2)
     return result
+
+def change_date_format(input_date_str):
+    # Parse the input date string into a datetime object
+    input_date = datetime.strptime(input_date_str, "%Y-%m-%d %H:%M:%S.%f")
+
+    # Format the datetime object into the desired format
+    formatted_date_str = input_date.strftime("%d/%m/%Y %H:%M")
+
+    return formatted_date_str
 
 # def return_all_faces_from_an_image():

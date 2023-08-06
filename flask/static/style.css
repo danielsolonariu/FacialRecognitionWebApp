@@ -188,3 +188,61 @@ footer a:hover {
 .upload-button button:hover {
     background-color: #00C0E4;
 }
+.recognition-container {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 8px;
+}
+.recognition-container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.history-item-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+}
+.history-item-container:last-child {
+    border-bottom: none;
+}
+.image-box {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+.history-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.result-box {
+    text-align: center;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 4px;
+}
+.result-success {
+    background-color: #a0d468;
+    color: #ffffff;
+    width: 150px;
+}
+.result-fail {
+    background-color: #e54d42;
+    color: #ffffff;
+    width: 150px;
+}
+.delete-btn {
+    background-color: #e54d42;
+    color: #ffffff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
